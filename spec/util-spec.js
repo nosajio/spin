@@ -18,9 +18,9 @@ test('convertRgbToHsl', function (assert) {
 });
 
 test('convertHslToRgb', function (assert) {
-  const correct = [170, 187, 204];
+  const correct = [169, 186, 203];
   const hsl = [210, 25, 73];
   const rgb = util.convertHslToRgb(hsl);
   assert.plan(1);
-  assert.deepEqual(hsl, correct, 'Parse HSL value to RGBArray');
+  assert.deepEqual(rgb, correct, 'Parse HSL value to RGBArray');
 });

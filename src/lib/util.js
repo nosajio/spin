@@ -96,12 +96,42 @@ function convertHexToRgb(hexString) {
 
 /**!
  * Convert RGBArray to HSLArray
+ * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
  *
  */
 function convertRgbToHsl(rgbArray) {
   if (! isRGBArray(rgbArray)) {
     throw new TypeError('Pass a valid RGBArray');
   }
+  var hue = 0;
+  var saturation = 0;
+  var luminance = 0;
+  const red = rgbArray[0] / 255;
+  const green = rgbArray[1] / 255;
+  const blue = rgbArray[2] / 255;
+  const min = Math.min(red, green, blue);
+  const max = Math.max(red, green, blue);
+  luminance = Math.round(((min + max) / 2) * 100);
+  saturation = (luminance < .5) ?
+    Math.round( ((max - min) / (max + min)) * 100 ) :
+    Math.round( ((max - min) / (2 - max - min)) * 100 );
+  if (min !== max) {
+    if (red > green && red > blue) {
+      hue = (green - blue) / (max - min);
+    } else
+    if (green > red && green > blue) {
+      hue = 2 + (blue - red) / (max - min);
+    } else
+    if (blue > red && blue > green) {
+      hue = 4 + (red - green) / (max - min);
+    }
+    // Convert hue to degrees by * 60
+    hue = Math.round(hue * 60);
+    if (hue < 0) {
+      hue = hue + 360;
+    }
+  }
+  return [ hue, saturation, luminance ]
 }
 
 
@@ -115,4 +145,49 @@ function convertHslToRgb(hslArray) {
   if (! isHSLArray(hslArray)) {
     throw new TypeError('Pass a valid HSLArray');
   }
+  const hue = hslArray[0];
+  const saturation = hslArray[1] / 100;
+  const luminance = hslArray[2] / 100;
+  var rgb = [0, 0, 0];
+  // Is this a grey? (no saturation)
+  if (saturation === 0) {
+    rgb = [
+      luminance * 255,
+      luminance * 255,
+      luminance * 255
+    ];
+  }
+  const tmp1 = (luminance > .5) ?
+    (luminance + saturation) - (luminance * saturation) :
+    luminance * (1 + saturation);
+  const tmp2 = 2 * luminance - tmp1;
+  const flatHue = hue / 360;
+  const tmpRgb = [
+    flatHue + .333,
+    flatHue,
+    flatHue - .333
+  ];
+  tmpRgb.forEach((it, i) => {
+    if (it > 1) {
+      tmpRgb[i] = it - 1;
+    } else if (it < 0) {
+      tmpRgb[i] = it + 1;
+    }
+  });
+  tmpRgb.forEach((it, i) => {
+    if (6 * it < 1) {
+      rgb[i] = tmp2 + (tmp1 - tmp2) * 6 * it;
+    } else
+    if (2 * it < 1) {
+      rgb[i] = tmp1;
+    } else
+    if (3 * it < 2) {
+      rgb[i] = tmp2 + (tmp1 - tmp2) * (.666 - it) * 6;
+    } else {
+      rgb[i] = tmp2;
+    }
+    // Convert value to 8bit
+    rgb[i] = Math.round(rgb[i] * 255);
+  });
+  return rgb;
 }
