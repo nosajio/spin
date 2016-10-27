@@ -1,4 +1,10 @@
-const {isRGBArray, isHexString} = require('./util');
+const {
+  isRGBArray,
+  isHexString,
+  convertHexToRgb,
+  convertRgbToHsl,
+  convertHslToRgb
+} = require('./util');
 
 module.exports = complement;
 
@@ -13,12 +19,14 @@ function complement(color) {
   if (! isRGBArray(color) && ! isHexString(color)) {
     throw new TypeError(`complement(color) requires an RGBArray or HexString. passed ${typeof color}`);
   }
-  let complementRGB;
-  if (isHexString(color)) {
-    complementRGB = 'aabbcc';
-  } else
-  if (isRGBArray(color)) {
-    complementRGB = [0, 0, 0];
-  }
+  const rgb = isHexString(color) ? convertHexToRgb(color) : color;
+  const hsl = convertRgbToHsl(rgb);
+  // Go around the color wheel 180˚
+  const complementHsl = [
+    (hsl[0] + 180) > 360 ? hsl[0] - 180 : hsl[0] + 180,
+    hsl[1],
+    hsl[2]
+  ];
+  const complementRGB = convertHslToRgb(complementHsl);
   return complementRGB;
 }
