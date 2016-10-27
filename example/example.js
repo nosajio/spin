@@ -4,8 +4,8 @@
   const el = document.querySelectorAll.bind(document);
 
   const start = el('.start-color')[0];
-  const endOne = el('.end-color-one')[0];
-  const endTwo = el('.end-color-two')[0];
+  const end = el('.end-color')[0];
+  const endText = el('.end-color-text')[0];
 
   const input = el('.start-color__input')[0];
   input.addEventListener('change', handleInputChange);
@@ -13,12 +13,12 @@
 
   function handleInputChange() {
     const color = input.value;
-    start.style.backgroundColor = color;
+    start.style.borderColor = color;
     if (spin) {
       const compColor = spin.splitComplement(color);
       console.log(compColor);
-      endOne.style.backgroundColor = `rgb(${compColor.colors[0].join(', ')})`;
-      endTwo.style.backgroundColor = `rgb(${compColor.colors[1].join(', ')})`;
+      end.style.backgroundColor = `rgb(${compColor.colors[0].join(', ')})`;
+      endText.style.color = `rgb(${compColor.colors[1].join(', ')})`;
     }
   }
 }());
