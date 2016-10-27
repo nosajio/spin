@@ -16,7 +16,7 @@
     if (spin) {
       const compColor = spin.complement(color);
       console.log(compColor);
-      end.style.backgroundColor = `rgb(${compColor.join(', ')})`;
+      end.style.backgroundColor = `rgb(${compColor.colors[0].join(', ')})`;
     }
   }
 }());

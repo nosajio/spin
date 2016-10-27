@@ -1,6 +1,7 @@
 const {
   isRGBArray,
   isHexString,
+  createSpinObject,
   convertHexToRgb,
   convertRgbToHsl,
   convertHslToRgb
@@ -28,5 +29,5 @@ function complement(color) {
     hsl[2]
   ];
   const complementRGB = convertHslToRgb(complementHsl);
-  return complementRGB;
+  return createSpinObject(rgb, complementRGB);
 }

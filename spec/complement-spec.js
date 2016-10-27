@@ -1,3 +1,4 @@
+const { isRGBArray, isSpinObject } = require('../src/lib/util');
 const complement = require('../src/lib/complement');
 const test = require('tape');
 
@@ -8,12 +9,9 @@ test('complement(color) should throw when passed anything that is not hex string
   assert.doesNotThrow(() => complement('#aabbcc'), 'Passed `#aabbcc`, didnt throw');
 });
 
-test('complement(color) should return the same type that its passed', function (assert) {
-  const rgbColor = [100,220,10];
+test('complement(color) should always return SpinObject', function (assert) {
   const hexColor = '#aabbcc';
-  const arr = complement(rgbColor);
-  const str = complement(hexColor);
-  assert.plan(2);
-  assert.ok(typeof arr === 'object', 'passed & returns RGBArray');
-  assert.ok(typeof str === 'string', 'passed & returns HexString');
+  const compColor = complement(hexColor);
+  assert.plan(1);
+  assert.ok(isSpinObject(compColor), 'passed HEX, returns SpinObject');
 });

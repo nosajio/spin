@@ -1,11 +1,52 @@
 
 module.exports = {
+  createSpinObject,
+  isSpinObject,
   isRGBArray,
   isHexString,
   convertHexToRgb,
   convertRgbToHsl,
   convertHslToRgb,
 };
+
+
+function createSpinObject(base, colors) {
+  if (isRGBArray(colors)) {
+    colors = [ colors ];
+  } else {
+    if (! isRGBArray(colors[0])) {
+      throw new TypeError('Colors must be a RGBArray, or an array of many RGBArray\'s');
+    }
+  }
+  const spinModel = {
+    base,
+    colors,
+  };
+  return Object.freeze(
+    spinModel
+  );
+}
+
+
+/**!
+ * Is Spin Object
+ * Returns truthy when passed a valid SpinObject
+ *
+ * @param {SpinObject} it
+ * @return {bool}
+ */
+function isSpinObject(it) {
+  if (typeof it !== 'object') {
+    return false;
+  }
+  if (! it.hasOwnProperty('base')) {
+    return false;
+  }
+  if (! it.hasOwnProperty('colors')) {
+    return false;
+  }
+  return true;
+}
 
 
 /**!
@@ -98,6 +139,8 @@ function convertHexToRgb(hexString) {
  * Convert RGBArray to HSLArray
  * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
  *
+ * @param {RGBArray} rgbArray
+  * @return {HSLArray} HslArray
  */
 function convertRgbToHsl(rgbArray) {
   if (! isRGBArray(rgbArray)) {
@@ -137,6 +180,7 @@ function convertRgbToHsl(rgbArray) {
 
 /**!
  * Convert HSLArray to RGBArray
+ * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
  *
  * @param {HSLArray} hslArray
  * @return {RGBArray} rgbArray
