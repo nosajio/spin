@@ -6,7 +6,8 @@
  */
 
 const complement = require('./lib/complement');
+const splitComplement = require('./lib/split-complement');
 
 if (window) {
-  window.spin = { complement };
+  window.spin = { complement, splitComplement };
 }

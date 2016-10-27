@@ -10,11 +10,17 @@
     <style media="screen">
       .start-color,
       .end-color {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         box-sizing: border-box;
         width: 100%;
         height: 50vh;
-        padding: 100px;
-        text-align: center;
+      }
+      .end-color-one,
+      .end-color-two {
+        width: 50%;
+        height: 100%;
       }
     </style>
   </head>
@@ -25,7 +31,10 @@
         value="#ab5e5a"
         class="start-color__input">
     </div>
-    <div class="end-color"></div>
+    <div class="end-color">
+      <div class="end-color-one"></div>
+      <div class="end-color-two"></div>
+    </div>
     <script src="../bundle/spin.js"></script>
     <script src="./example.js"></script>
   </body>

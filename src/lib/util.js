@@ -171,7 +171,7 @@ function convertRgbToHsl(rgbArray) {
     // Convert hue to degrees by * 60
     hue = Math.round(hue * 60);
     if (hue < 0) {
-      hue = hue + 360;
+      hue += 360;
     }
   }
   return [ hue, saturation, luminance ]
