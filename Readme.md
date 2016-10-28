@@ -18,3 +18,6 @@ Returns a `<SpinObject>` with the `.color` prop containing complementary `RGBArr
 
 ### `spin.splitComplement(<RGBArray> || <HEXString>)`
 Returns a `<SpinObject>` with the `.color` prop containing split-complementary `RGBArray` colors.
+
+### `spin.tetriadic(<RGBArray> || <HEXString>)`
+Returns a `<SpinObject>` with the `.color` prop containing split-complementary `RGBArray` colors.
