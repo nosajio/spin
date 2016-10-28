@@ -3,7 +3,7 @@
 Spin is a library used for navigating the color wheel with JS.
 
 ## How to use it
-If you just want to use spin in the browser, you can use the `bundle/spin.js` file
+First off, look at the example to see how it works. If you just want to use spin in the browser, you can use the `bundle/spin.js` file. If you want to use it as a part of your own project, I recommend checking out the repo and `require`-ing the modules you need.
 
 ## Advanced usage & development
   1. Clone this repo
