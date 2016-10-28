@@ -13,7 +13,7 @@
 
   function handleInputChange() {
     const color = input.value;
-    start.style.borderColor = color;
+    start.style.backgroundColor = color;
     if (spin) {
       const compColor = spin.triadic(color);
       console.log(compColor);
