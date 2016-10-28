@@ -32,7 +32,7 @@ function complement(color) {
   return createSpinObject(rgb, complementRGB);
 }
 
-},{"./util":3}],2:[function(require,module,exports){
+},{"./util":4}],2:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -74,7 +74,43 @@ function splitComplement(color) {
   return createSpinObject(rgb, complementsRGB);
 }
 
-},{"./util":3}],3:[function(require,module,exports){
+},{"./util":4}],3:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _require = require('./util'),
+    isRGBArray = _require.isRGBArray,
+    isHexString = _require.isHexString,
+    createSpinObject = _require.createSpinObject,
+    convertHexToRgb = _require.convertHexToRgb,
+    convertRgbToHsl = _require.convertRgbToHsl,
+    convertHslToRgb = _require.convertHslToRgb;
+
+module.exports = triadic;
+
+/**!
+ * Triadic
+ *
+ * @param {RGBArray || hexString} color
+ * @returns {RGBArray} triadic
+ */
+function triadic(color) {
+  if (!isRGBArray(color) && !isHexString(color)) {
+    throw new TypeError('triadic(color) requires an RGBArray or HexString. passed ' + (typeof color === 'undefined' ? 'undefined' : _typeof(color)));
+  }
+  var rgb = isHexString(color) ? convertHexToRgb(color) : color;
+  var hsl = convertRgbToHsl(rgb);
+  // Go around the color wheel 120˚ & 240˚
+  var triadicHSL = [];
+  triadicHSL.push([hsl[0] + 120 > 360 ? hsl[0] + 120 - 360 : hsl[0] + 120, hsl[1], hsl[2]]);
+  triadicHSL.push([hsl[0] + 240 > 360 ? hsl[0] + 240 - 360 : hsl[0] + 240, hsl[1], hsl[2]]);
+  var triadicRGB = [convertHslToRgb(triadicHSL[0]), convertHslToRgb(triadicHSL[1])];
+  console.log(triadicRGB);
+  return createSpinObject(rgb, triadicRGB);
+}
+
+},{"./util":4}],4:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -282,11 +318,12 @@ function convertHslToRgb(hslArray) {
     }
     // Convert value to 8bit
     rgb[i] = Math.round(rgb[i] * 255);
+    rgb[i] = rgb[i] < 0 ? 0 : rgb[i];
   });
   return rgb;
 }
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 /**!
@@ -298,9 +335,10 @@ function convertHslToRgb(hslArray) {
 
 var complement = require('./lib/complement');
 var splitComplement = require('./lib/split-complement');
+var triadic = require('./lib/triadic');
 
 if (window) {
-  window.spin = { complement: complement, splitComplement: splitComplement };
+  window.spin = { complement: complement, splitComplement: splitComplement, triadic: triadic };
 }
 
-},{"./lib/complement":1,"./lib/split-complement":2}]},{},[4]);
+},{"./lib/complement":1,"./lib/split-complement":2,"./lib/triadic":3}]},{},[5]);

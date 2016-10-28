@@ -232,6 +232,7 @@ function convertHslToRgb(hslArray) {
     }
     // Convert value to 8bit
     rgb[i] = Math.round(rgb[i] * 255);
+    rgb[i] = rgb[i] < 0 ? 0 : rgb[i];
   });
   return rgb;
 }
