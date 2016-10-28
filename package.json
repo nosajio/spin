@@ -1,7 +1,7 @@
 {
-  "name": "spin",
+  "name": "spin-color",
   "version": "1.0.0",
-  "description": "nice colors",
+  "description": "Nice colors",
   "main": "build.js",
   "author": "Jason <jason@nosaj.io>",
   "license": "MIT",
