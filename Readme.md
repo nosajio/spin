@@ -1,3 +1,5 @@
+![Spin Logo](http://i.imgur.com/iETvK9F.png 400x)
+
 > Nice colors
 
 Spin is a library for accessing the color wheel with JS.
