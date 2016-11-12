@@ -106,7 +106,6 @@ function triadic(color) {
   triadicHSL.push([hsl[0] + 120 > 360 ? hsl[0] + 120 - 360 : hsl[0] + 120, hsl[1], hsl[2]]);
   triadicHSL.push([hsl[0] + 240 > 360 ? hsl[0] + 240 - 360 : hsl[0] + 240, hsl[1], hsl[2]]);
   var triadicRGB = [convertHslToRgb(triadicHSL[0]), convertHslToRgb(triadicHSL[1])];
-  console.log(triadicRGB);
   return createSpinObject(rgb, triadicRGB);
 }
 
