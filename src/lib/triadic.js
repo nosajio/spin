@@ -37,6 +37,5 @@ function triadic(color) {
     convertHslToRgb(triadicHSL[0]),
     convertHslToRgb(triadicHSL[1])
   ];
-  console.log(triadicRGB);
   return createSpinObject(rgb, triadicRGB);
 }
