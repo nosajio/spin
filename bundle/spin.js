@@ -32,7 +32,36 @@ function complement(color) {
   return createSpinObject(rgb, complementRGB);
 }
 
-},{"./util":4}],2:[function(require,module,exports){
+},{"./util":5}],2:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _require = require('./util'),
+    convertHexToRgb = _require.convertHexToRgb,
+    convertRgbToHsl = _require.convertRgbToHsl,
+    isRGBArray = _require.isRGBArray,
+    isHexString = _require.isHexString;
+
+module.exports = getLuminance;
+
+/**
+ * Get Luminance
+ * Return the luminance percentage for the passed color
+ *
+ * @param {RGBArray|HexString} color
+ * @return {Number}
+ */
+function getLuminance(color) {
+  if (!isRGBArray(color) && !isHexString(color)) {
+    throw new TypeError('getLuminance(color) requires an RGBArray or HexString. passed ' + (typeof color === 'undefined' ? 'undefined' : _typeof(color)));
+  }
+  var colorRgb = isHexString(color) ? convertHexToRgb(color) : color;
+  var colorHsl = convertRgbToHsl(colorRgb);
+  return colorHsl[2];
+}
+
+},{"./util":5}],3:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -74,7 +103,7 @@ function splitComplement(color) {
   return createSpinObject(rgb, complementsRGB);
 }
 
-},{"./util":4}],3:[function(require,module,exports){
+},{"./util":5}],4:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -109,7 +138,7 @@ function triadic(color) {
   return createSpinObject(rgb, triadicRGB);
 }
 
-},{"./util":4}],4:[function(require,module,exports){
+},{"./util":5}],5:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -322,7 +351,7 @@ function convertHslToRgb(hslArray) {
   return rgb;
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 /**!
@@ -335,9 +364,10 @@ function convertHslToRgb(hslArray) {
 var complement = require('./lib/complement');
 var splitComplement = require('./lib/split-complement');
 var triadic = require('./lib/triadic');
+var getLuminance = require('./lib/luminance');
 
 if (window) {
-  window.spin = { complement: complement, splitComplement: splitComplement, triadic: triadic };
+  window.spin = { complement: complement, splitComplement: splitComplement, triadic: triadic, getLuminance: getLuminance };
 }
 
-},{"./lib/complement":1,"./lib/split-complement":2,"./lib/triadic":3}]},{},[5]);
+},{"./lib/complement":1,"./lib/luminance":2,"./lib/split-complement":3,"./lib/triadic":4}]},{},[6]);
