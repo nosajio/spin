@@ -189,50 +189,32 @@ function convertHslToRgb(hslArray) {
   if (! isHSLArray(hslArray)) {
     throw new TypeError('Pass a valid HSLArray');
   }
-  const hue = hslArray[0];
-  const saturation = hslArray[1] / 100;
-  const luminance = hslArray[2] / 100;
-  var rgb = [0, 0, 0];
-  // Is this a grey? (no saturation)
-  if (saturation === 0) {
-    rgb = [
-      luminance * 255,
-      luminance * 255,
-      luminance * 255
-    ];
+  let rgb = [0, 0, 0];
+  if (hslArray[1] === 0) {
+    // Monochrome when saturation is 0
+    rgb[0] = rgb[1] = rgb[2] = hslArray[1];
+  } else {
+    const h = hslArray[0] / 360;
+    const s = hslArray[1] / 100;
+    const l = hslArray[2] / 100;
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    rgb[0] = hue2rgb(p, q, h + 1/3);
+    rgb[1] = hue2rgb(p, q, h);
+    rgb[2] = hue2rgb(p, q, h - 1/3);
   }
-  const tmp1 = (luminance > .5) ?
-    (luminance + saturation) - (luminance * saturation) :
-    luminance * (1 + saturation);
-  const tmp2 = 2 * luminance - tmp1;
-  const flatHue = hue / 360;
-  const tmpRgb = [
-    flatHue + .333,
-    flatHue,
-    flatHue - .333
+  return [
+    Math.round(rgb[0] * 255),
+    Math.round(rgb[1] * 255),
+    Math.round(rgb[2] * 255)
   ];
-  tmpRgb.forEach((it, i) => {
-    if (it > 1) {
-      tmpRgb[i] = it - 1;
-    } else if (it < 0) {
-      tmpRgb[i] = it + 1;
-    }
-  });
-  tmpRgb.forEach((it, i) => {
-    if (6 * it < 1) {
-      rgb[i] = tmp2 + (tmp1 - tmp2) * 6 * it;
-    } else
-    if (2 * it < 1) {
-      rgb[i] = tmp1;
-    } else
-    if (3 * it < 2) {
-      rgb[i] = tmp2 + (tmp1 - tmp2) * (.666 - it) * 6;
-    } else {
-      rgb[i] = tmp2;
-    }
-    // Convert value to 8bit
-    rgb[i] = Math.round(rgb[i] * 255);
-    rgb[i] = rgb[i] < 0 ? 0 : rgb[i];
-  });
-  return rgb;
+
+  function hue2rgb(p, q, t){
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  }
 }
