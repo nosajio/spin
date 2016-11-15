@@ -2,7 +2,7 @@
   "name": "spin-color",
   "version": "1.0.9",
   "description": "Nice colors",
-  "main": "bundle/spin.js",
+  "main": "src/spin.js",
   "author": "Jason <jason@nosaj.io>",
   "license": "MIT",
   "scripts": {
