@@ -137,7 +137,7 @@ function convertHexToRgb(hexString) {
 
 /**!
  * Convert RGBArray to HSLArray
- * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+ * For explanations, see: http://www.easyrgb.com/index.php?X=MATH&H=18#text18
  *
  * @param {RGBArray} rgbArray
   * @return {HSLArray} HslArray
@@ -146,41 +146,44 @@ function convertRgbToHsl(rgbArray) {
   if (! isRGBArray(rgbArray)) {
     throw new TypeError('Pass a valid RGBArray');
   }
-  var hue = 0;
-  var saturation = 0;
-  var luminance = 0;
+  let hue = 0;
+  let saturation = 0;
+  let luminance = 0;
   const red = rgbArray[0] / 255;
   const green = rgbArray[1] / 255;
   const blue = rgbArray[2] / 255;
   const min = Math.min(red, green, blue);
   const max = Math.max(red, green, blue);
-  luminance = Math.round(((min + max) / 2) * 100);
-  saturation = (luminance < .5) ?
-    Math.round( ((max - min) / (max + min)) * 100 ) :
-    Math.round( ((max - min) / (2 - max - min)) * 100 );
-  if (min !== max) {
-    if (red > green && red > blue) {
-      hue = (green - blue) / (max - min);
-    } else
-    if (green > red && green > blue) {
-      hue = 2 + (blue - red) / (max - min);
-    } else
-    if (blue > red && blue > green) {
-      hue = 4 + (red - green) / (max - min);
-    }
-    // Convert hue to degrees by * 60
-    hue = Math.round(hue * 60);
-    if (hue < 0) {
-      hue += 360;
-    }
+  const delta = max - min;
+  luminance = (max + min) / 2;
+
+  if (delta === 0) { // achromatic
+    hue = 0;
+    saturation = 0;
+  } else {
+    saturation = luminance < .5 ? delta / (max + min) : delta / (2 - max - min);
+    const redDelta   = (((max - red)   / 6) + (delta / 2)) / delta;
+    const greenDelta = (((max - green) / 6) + (delta / 2)) / delta;
+    const blueDelta  = (((max - blue)  / 6) + (delta / 2)) / delta;
+    if      (red   === max)  hue = blueDelta - greenDelta;
+    else if (green === max)  hue = (1 / 3) + redDelta - blueDelta;
+    else if (blue  === max)  hue = (2 / 3) + greenDelta - redDelta;
+    if (hue < 0) hue += 1;
+    if (hue > 1) hue -= 1;
   }
-  return [ hue, saturation, luminance ]
+
+  return [
+    Math.round(hue * 360),        // H
+    Math.round(saturation * 100), // S
+    Math.round(luminance * 100)   // L
+  ];
 }
 
 
 /**!
  * Convert HSLArray to RGBArray
- * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+ * For explanations and inspiration:
+ * http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
  *
  * @param {HSLArray} hslArray
  * @return {RGBArray} rgbArray
@@ -204,9 +207,9 @@ function convertHslToRgb(hslArray) {
     rgb[2] = hue2rgb(p, q, h - 1/3);
   }
   return [
-    Math.round(rgb[0] * 255),
-    Math.round(rgb[1] * 255),
-    Math.round(rgb[2] * 255)
+    Math.round(rgb[0] * 255), // R
+    Math.round(rgb[1] * 255), // G
+    Math.round(rgb[2] * 255)  // B
   ];
 
   function hue2rgb(p, q, t){

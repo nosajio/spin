@@ -10,19 +10,35 @@ test('convertHexToRgb', function (assert) {
 });
 
 test('convertRgbToHsl', function (assert) {
-  const correct = [210, 25, 73];
-  const rgb = [170, 187, 204];
-  const hsl = util.convertRgbToHsl(rgb);
-  assert.plan(1);
-  assert.deepEqual(hsl, correct, 'Parse RGB value to HEXArray');
+  const correct1 = [0, 81, 48];
+  const correct2 = [0, 49, 90];
+  const correct3 = [0, 0, 100];
+  const rgb1 = [222, 23, 23];
+  const rgb2 = [242, 217, 217];
+  const rgb3 = [255, 255, 255];
+  const hsl1 = util.convertRgbToHsl(rgb1);
+  const hsl2 = util.convertRgbToHsl(rgb2);
+  const hsl3 = util.convertRgbToHsl(rgb3);
+  assert.plan(3);
+  assert.deepEqual(hsl1, correct1, 'Parse RGB value to HslArray');
+  assert.deepEqual(hsl2, correct2, 'Parse RGB value to HslArray');
+  assert.deepEqual(hsl3, correct3, 'Parse RGB value to HslArray');
 });
 
 test('convertHslToRgb', function (assert) {
-  const correct = [169, 186, 203];
-  const hsl = [210, 25, 73];
-  const rgb = util.convertHslToRgb(hsl);
-  assert.plan(1);
-  assert.deepEqual(rgb, correct, 'Parse HSL value to RGBArray');
+  const correct1 = [169, 186, 203];
+  const correct2 = [75, 34, 129];
+  const correct3 = [24, 97, 0];
+  const hsl1 = [210, 25, 73];
+  const hsl2 = [266, 58, 32];
+  const hsl3 = [105, 100, 19];
+  const rgb1 = util.convertHslToRgb(hsl1);
+  const rgb2 = util.convertHslToRgb(hsl2);
+  const rgb3 = util.convertHslToRgb(hsl3);
+  assert.plan(3);
+  assert.deepEqual(rgb1, correct1, 'Parse HSL value to RGBArray');
+  assert.deepEqual(rgb2, correct2, 'Parse HSL value to RGBArray');
+  assert.deepEqual(rgb3, correct3, 'Parse HSL value to RGBArray');
 });
 
 test('isSpinObject', function (assert) {
