@@ -268,7 +268,7 @@ function convertHexToRgb(hexString) {
 
 /**!
  * Convert RGBArray to HSLArray
- * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+ * For explanations, see: http://www.easyrgb.com/index.php?X=MATH&H=18#text18
  *
  * @param {RGBArray} rgbArray
   * @return {HSLArray} HslArray
@@ -285,28 +285,33 @@ function convertRgbToHsl(rgbArray) {
   var blue = rgbArray[2] / 255;
   var min = Math.min(red, green, blue);
   var max = Math.max(red, green, blue);
-  luminance = Math.round((min + max) / 2 * 100);
-  saturation = luminance < .5 ? Math.round((max - min) / (max + min) * 100) : Math.round((max - min) / (2 - max - min) * 100);
-  if (min !== max) {
-    if (red > green && red > blue) {
-      hue = (green - blue) / (max - min);
-    } else if (green > red && green > blue) {
-      hue = 2 + (blue - red) / (max - min);
-    } else if (blue > red && blue > green) {
-      hue = 4 + (red - green) / (max - min);
-    }
-    // Convert hue to degrees by * 60
-    hue = Math.round(hue * 60);
-    if (hue < 0) {
-      hue += 360;
-    }
+  var delta = max - min;
+  luminance = (max + min) / 2;
+
+  if (delta === 0) {
+    // achromatic
+    hue = 0;
+    saturation = 0;
+  } else {
+    saturation = luminance < .5 ? delta / (max + min) : delta / (2 - max - min);
+    var redDelta = ((max - red) / 6 + delta / 2) / delta;
+    var greenDelta = ((max - green) / 6 + delta / 2) / delta;
+    var blueDelta = ((max - blue) / 6 + delta / 2) / delta;
+    if (red === max) hue = blueDelta - greenDelta;else if (green === max) hue = 1 / 3 + redDelta - blueDelta;else if (blue === max) hue = 2 / 3 + greenDelta - redDelta;
+    if (hue < 0) hue += 1;
+    if (hue > 1) hue -= 1;
   }
-  return [hue, saturation, luminance];
+
+  return [Math.round(hue * 360), // H
+  Math.round(saturation * 100), // S
+  Math.round(luminance * 100) // L
+  ];
 }
 
 /**!
  * Convert HSLArray to RGBArray
- * For explanations, see: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+ * For explanations and inspiration:
+ * http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
  *
  * @param {HSLArray} hslArray
  * @return {RGBArray} rgbArray
@@ -315,40 +320,33 @@ function convertHslToRgb(hslArray) {
   if (!isHSLArray(hslArray)) {
     throw new TypeError('Pass a valid HSLArray');
   }
-  var hue = hslArray[0];
-  var saturation = hslArray[1] / 100;
-  var luminance = hslArray[2] / 100;
   var rgb = [0, 0, 0];
-  // Is this a grey? (no saturation)
-  if (saturation === 0) {
-    rgb = [luminance * 255, luminance * 255, luminance * 255];
+  if (hslArray[1] === 0) {
+    // Monochrome when saturation is 0
+    rgb[0] = rgb[1] = rgb[2] = hslArray[1];
+  } else {
+    var h = hslArray[0] / 360;
+    var s = hslArray[1] / 100;
+    var l = hslArray[2] / 100;
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+    rgb[0] = hue2rgb(p, q, h + 1 / 3);
+    rgb[1] = hue2rgb(p, q, h);
+    rgb[2] = hue2rgb(p, q, h - 1 / 3);
   }
-  var tmp1 = luminance > .5 ? luminance + saturation - luminance * saturation : luminance * (1 + saturation);
-  var tmp2 = 2 * luminance - tmp1;
-  var flatHue = hue / 360;
-  var tmpRgb = [flatHue + .333, flatHue, flatHue - .333];
-  tmpRgb.forEach(function (it, i) {
-    if (it > 1) {
-      tmpRgb[i] = it - 1;
-    } else if (it < 0) {
-      tmpRgb[i] = it + 1;
-    }
-  });
-  tmpRgb.forEach(function (it, i) {
-    if (6 * it < 1) {
-      rgb[i] = tmp2 + (tmp1 - tmp2) * 6 * it;
-    } else if (2 * it < 1) {
-      rgb[i] = tmp1;
-    } else if (3 * it < 2) {
-      rgb[i] = tmp2 + (tmp1 - tmp2) * (.666 - it) * 6;
-    } else {
-      rgb[i] = tmp2;
-    }
-    // Convert value to 8bit
-    rgb[i] = Math.round(rgb[i] * 255);
-    rgb[i] = rgb[i] < 0 ? 0 : rgb[i];
-  });
-  return rgb;
+  return [Math.round(rgb[0] * 255), // R
+  Math.round(rgb[1] * 255), // G
+  Math.round(rgb[2] * 255) // B
+  ];
+
+  function hue2rgb(p, q, t) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  }
 }
 
 },{}],6:[function(require,module,exports){
