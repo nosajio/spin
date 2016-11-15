@@ -1,6 +1,6 @@
 {
   "name": "spin-color",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Nice colors",
   "main": "bundle/spin.js",
   "author": "Jason <jason@nosaj.io>",
