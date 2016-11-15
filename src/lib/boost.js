@@ -21,14 +21,22 @@ function boost(color) {
   }
   const colorRgb = isHexString(color) ? convertHexToRgb(color) : color;
   const colorHsl = convertRgbToHsl(colorRgb);
-  if (colorHsl[2] < 51) {
+  let boostedHsl = colorHsl;
+  if (colorHsl[2] < 55) {
     const boostedLuminance = colorHsl[2] + 30;
-    const boostedRgb = convertHslToRgb([
-      colorHsl[0],
-      colorHsl[1],
+    boostedHsl = [
+      boostedHsl[0],
+      boostedHsl[1],
       boostedLuminance
-    ]);
-    return boostedRgb;
+    ];
   }
-  return colorRgb;
+  if (colorHsl[1] < 55) {
+    const boostedSaturation = boostedHsl[1] + 30;
+    boostedHsl = [
+      boostedHsl[0],
+      boostedSaturation,
+      boostedHsl[2],
+    ];
+  }
+  return convertHslToRgb(boostedHsl);
 }

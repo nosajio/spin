@@ -14,10 +14,10 @@
   function handleInputChange() {
     const color = input.value;
     start.style.backgroundColor = color;
-    if (spin) {
-      const compColor = spin.splitComplement(color);
-      end.style.backgroundColor = `rgb(${compColor.colors[0].join(', ')})`;
-      endText.style.color = `rgb(${compColor.colors[1].join(', ')})`;
-    }
+
+    const compColor = spin.splitComplement(color);
+    const clr1 = spin.boost(compColor.colors[0]);
+    end.style.backgroundColor = `rgb(${clr1.join(', ')})`;
+    endText.style.color = `rgb(${compColor.colors[1].join(', ')})`;
   }
 }());
