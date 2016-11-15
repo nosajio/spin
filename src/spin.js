@@ -19,7 +19,7 @@ const pkg = {
   boost
 };
 
-if (window) {
+if (typeof window !== 'undefined') {
   window.spin = pkg;
 } else if (typeof module !== 'undefined' && module.exports) {
   module.exports = pgk;
