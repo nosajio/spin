@@ -15,7 +15,7 @@
     const color = input.value;
     start.style.backgroundColor = color;
     if (spin) {
-      const compColor = spin.triadic(color);
+      const compColor = spin.splitComplement(color);
       end.style.backgroundColor = `rgb(${compColor.colors[0].join(', ')})`;
       endText.style.color = `rgb(${compColor.colors[1].join(', ')})`;
     }

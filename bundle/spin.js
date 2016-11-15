@@ -4,6 +4,41 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _require = require('./util'),
+    convertHexToRgb = _require.convertHexToRgb,
+    convertRgbToHsl = _require.convertRgbToHsl,
+    convertHslToRgb = _require.convertHslToRgb,
+    isRGBArray = _require.isRGBArray,
+    isHexString = _require.isHexString;
+
+module.exports = boost;
+
+/**
+ * Boost
+ * Boost color based on luminance value
+ *
+ * @param {RGBArray|HexString} color
+ * @return {RGBArray}
+ */
+function boost(color) {
+  if (!isRGBArray(color) && !isHexString(color)) {
+    throw new TypeError('boost(color) requires an RGBArray or HexString. passed ' + (typeof color === 'undefined' ? 'undefined' : _typeof(color)));
+  }
+  var colorRgb = isHexString(color) ? convertHexToRgb(color) : color;
+  var colorHsl = convertRgbToHsl(colorRgb);
+  if (colorHsl[2] < 51) {
+    var boostedLuminance = colorHsl[2] + 30;
+    var boostedRgb = convertHslToRgb([colorHsl[0], colorHsl[1], boostedLuminance]);
+    return boostedRgb;
+  }
+  return colorRgb;
+}
+
+},{"./util":6}],2:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _require = require('./util'),
     isRGBArray = _require.isRGBArray,
     isHexString = _require.isHexString,
     createSpinObject = _require.createSpinObject,
@@ -32,7 +67,7 @@ function complement(color) {
   return createSpinObject(rgb, complementRGB);
 }
 
-},{"./util":5}],2:[function(require,module,exports){
+},{"./util":6}],3:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -61,7 +96,7 @@ function getLuminance(color) {
   return colorHsl[2];
 }
 
-},{"./util":5}],3:[function(require,module,exports){
+},{"./util":6}],4:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -103,7 +138,7 @@ function splitComplement(color) {
   return createSpinObject(rgb, complementsRGB);
 }
 
-},{"./util":5}],4:[function(require,module,exports){
+},{"./util":6}],5:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -138,7 +173,7 @@ function triadic(color) {
   return createSpinObject(rgb, triadicRGB);
 }
 
-},{"./util":5}],5:[function(require,module,exports){
+},{"./util":6}],6:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -349,7 +384,7 @@ function convertHslToRgb(hslArray) {
   }
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 /**!
@@ -363,9 +398,20 @@ var complement = require('./lib/complement');
 var splitComplement = require('./lib/split-complement');
 var triadic = require('./lib/triadic');
 var getLuminance = require('./lib/luminance');
+var boost = require('./lib/boost');
+
+var pkg = {
+  complement: complement,
+  splitComplement: splitComplement,
+  triadic: triadic,
+  getLuminance: getLuminance,
+  boost: boost
+};
 
 if (window) {
-  window.spin = { complement: complement, splitComplement: splitComplement, triadic: triadic, getLuminance: getLuminance };
+  window.spin = pkg;
+} else if (typeof module !== 'undefined' && module.exports) {
+  module.exports = pgk;
 }
 
-},{"./lib/complement":1,"./lib/luminance":2,"./lib/split-complement":3,"./lib/triadic":4}]},{},[6]);
+},{"./lib/boost":1,"./lib/complement":2,"./lib/luminance":3,"./lib/split-complement":4,"./lib/triadic":5}]},{},[7]);
