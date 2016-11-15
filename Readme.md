@@ -5,7 +5,7 @@
 Spin is a library for accessing the color wheel with JS.
 
 ## How to use it
-First off, look at the example to see how it works. If you just want to use spin in the browser, you can use the `bundle/spin.js` file. If you want to use it as a part of your own project, I recommend checking out the repo and `require`-ing the modules you need.
+If you just want to use spin in the browser, you can require the bundled `spin-color/bundle/spin.js` file. If you want to use methods from the library in your own project, just require it as normal.
 
 ## Advanced usage & development
   1. Clone this repo
@@ -30,3 +30,6 @@ Returns a `SpinObject` with the `.color` prop containing split-complementary `RG
 
 #### `spin.getLuminance(<RGBArray> || <HEXString>)`
 Returns a `Number` between 0 and 100 representing the luminance percentage of the passed color.
+
+#### `spin.boost(<RGBArray> || <HEXString>)`
+If the passed color saturation or luminance is below a threshold, it will be boosted. Returns a `RGBArray`
