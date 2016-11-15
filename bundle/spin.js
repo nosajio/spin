@@ -415,7 +415,7 @@ var pkg = {
 if (typeof window !== 'undefined') {
   window.spin = pkg;
 } else if (typeof module !== 'undefined' && module.exports) {
-  module.exports = pgk;
+  module.exports = pkg;
 }
 
 },{"./lib/boost":1,"./lib/complement":2,"./lib/luminance":3,"./lib/split-complement":4,"./lib/triadic":5}]},{},[7]);

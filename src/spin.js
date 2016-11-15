@@ -22,5 +22,5 @@ const pkg = {
 if (typeof window !== 'undefined') {
   window.spin = pkg;
 } else if (typeof module !== 'undefined' && module.exports) {
-  module.exports = pgk;
+  module.exports = pkg;
 }
