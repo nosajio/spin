@@ -10,6 +10,14 @@ module.exports = {
 };
 
 
+/**!
+ * Create Spin Object
+ * Generates a new SpinObject from input params
+ *
+ * @param {HexString|RGBArray|HSLArray} base
+ * @param {array} colors
+ * @returns {SpinObject}
+ */
 function createSpinObject(base, colors) {
   if (isRGBArray(colors)) {
     colors = [ colors ];
