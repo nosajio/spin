@@ -192,6 +192,14 @@ module.exports = {
   convertHslToRgb: convertHslToRgb
 };
 
+/**!
+ * Create Spin Object
+ * Generates a new SpinObject from input params
+ *
+ * @param {HexString|RGBArray|HSLArray} base
+ * @param {array} colors
+ * @returns {SpinObject}
+ */
 function createSpinObject(base, colors) {
   if (isRGBArray(colors)) {
     colors = [colors];
@@ -403,13 +411,15 @@ var splitComplement = require('./lib/split-complement');
 var triadic = require('./lib/triadic');
 var getLuminance = require('./lib/luminance');
 var boost = require('./lib/boost');
+var util = require('./lib/util');
 
 var pkg = {
   complement: complement,
   splitComplement: splitComplement,
   triadic: triadic,
   getLuminance: getLuminance,
-  boost: boost
+  boost: boost,
+  util: util
 };
 
 if (typeof window !== 'undefined') {
@@ -418,4 +428,4 @@ if (typeof window !== 'undefined') {
   module.exports = pkg;
 }
 
-},{"./lib/boost":1,"./lib/complement":2,"./lib/luminance":3,"./lib/split-complement":4,"./lib/triadic":5}]},{},[7]);
+},{"./lib/boost":1,"./lib/complement":2,"./lib/luminance":3,"./lib/split-complement":4,"./lib/triadic":5,"./lib/util":6}]},{},[7]);
