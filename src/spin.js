@@ -10,13 +10,15 @@ const splitComplement   = require('./lib/split-complement');
 const triadic           = require('./lib/triadic');
 const getLuminance      = require('./lib/luminance');
 const boost             = require('./lib/boost');
+const util              = require('./lib/util');
 
 const pkg = {
   complement,
   splitComplement,
   triadic,
   getLuminance,
-  boost
+  boost,
+  util,
 };
 
 if (typeof window !== 'undefined') {

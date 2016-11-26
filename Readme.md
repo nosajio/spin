@@ -17,37 +17,57 @@ If you just want to use spin in the browser, you can require the bundled `spin-c
 
 ### Color Harmonies
 
-#### `spin.complement(<RGBArray> || <HEXString>)`
+#### `spin.complement(base: RGBArray || HEXString)`
 returns `SpinObject`
 
 Returns a `SpinObject` with the `.color` prop containing complementary `RGBArray` color.
 
-#### `spin.splitComplement(<RGBArray> || <HEXString>)`
+#### `spin.splitComplement(base: RGBArray || HEXString)`
 returns `SpinObject`
 
 Returns a `SpinObject` with the `.color` prop containing split-complementary `RGBArray` colors.
 
-#### `spin.tetriadic(<RGBArray> || <HEXString>)`
+#### `spin.tetriadic(base: RGBArray || HEXString)`
 returns `SpinObject`
 
 Returns a `SpinObject` with the `.color` prop containing split-complementary `RGBArray` colors.
 
 ### Helper methods
 
-#### `spin.getLuminance(<RGBArray> || <HEXString>)`
+#### `spin.getLuminance(base: RGBArray || HEXString)`
 returns `number`
 
 Returns a `Number` between 0 and 100 representing the luminance percentage of the passed color.
 
-#### `spin.boost(<RGBArray> || <HEXString>)`
+#### `spin.boost(base: RGBArray || HEXString)`
 returns `RGBArray`
 
-#### `spin.spin(<RGBArray> || <HEXString>, spinValue <Number>)`
+#### `spin.spin(base: RGBArray || HEXString, spinValue: number)`
 returns `RGBArray`
 
 Change the the color's Hue value. `spinValue` should be between -360 and 360.
 
-#### `spin.balance(firstColor: <RGBArray || HEXString>, secondColor: <RGBArray || HEXString>)`
+### Utility methods
+
+#### `spin.util.isSpinObject(test)`
+returns: `boolean`
+
+#### `spin.util.isRGBArray(test)`
+returns: `boolean`
+
+#### `spin.util.isHexString(test)`
+returns: `boolean`
+
+#### `spin.util.convertHexToRgb(base: HEXString)`
+returns: `RGBArray`
+
+#### `spin.util.convertRgbToHsl(base: RGBArray)`
+returns: `HSLArray`
+
+#### `spin.util.convertHslToRgb(base: HSLArray)`
+returns: `RGBArray`
+
+#### `spin.util.createSpinObject(base: HexString || RGBArray || HSLArray, colors: array)`
 returns `SpinObject`
 
-Adjusts the two passed colors to ensure that they contrast well together. If the colors already have a good amount of contrast, they won't be changed.
+Outputs a `SpinObject`
